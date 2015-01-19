@@ -17,6 +17,7 @@ Graph.prototype = {
 		var node = this.nodes[index];
 		node.removeAllEdges();
 		this.nodes.splice(index, 1);
+		this.nodeIDList.splice(index, 1);
 	},
 	connectNodes: function(id1, id2, weight, undirected){
 		var node1 = this.nodes[this.nodeIDList.indexOf(id1)];
