@@ -8,4 +8,3 @@ var map = [
 	];
 var graph = new Graph();
 var grid = new Grid(map);
-grid.breadthFirstSearch(10, 21);

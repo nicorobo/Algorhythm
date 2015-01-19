@@ -1,3 +1,6 @@
+// DEPENDENCIES: graph.js
+
+
 var Grid = function(grid, options){
 	Graph.call(this, options);
 	this.grid = [];

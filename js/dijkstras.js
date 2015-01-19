@@ -1,8 +1,8 @@
-// DEPENDENCIES: graph.js
+// DEPENDENCIES: graph.js, binaryHeap.js
 
-Graph.prototype.breadthFirstSearch = function(startingNode, endingNode){
+Graph.prototype.dijkstras = function(startingNode, endingNode){
 	this.cleanNodes();
-	var frontier = [];
+	var frontier = new BinaryHeap(function(node){return node.cost});
 	this.getNode(startingNode).parent = null;
 	frontier.push(startingNode);
 	while(frontier.length>0){
