@@ -36,6 +36,9 @@ Graph.prototype = {
 			node2.removeEdge(node1);
 		}
 	},
+	getNode: function(id){
+		return this.nodes[this.nodeIDList.indexOf(id)];
+	},
 	readNodes: function(){
 		for(node in this.nodes){
 			console.log(this.nodes[node]);
@@ -94,3 +97,7 @@ Edge.prototype = {
 var graph = new Graph();
 var node1 = graph.addNode(1, 5, 2);
 var node2 = graph.addNode(4, 8, 1);
+var node3 = graph.addNode(2, 2, 1);
+graph.connectNodes(node1, node2);
+graph.connectNodes(node1, node3);
+graph.connectNodes(node2, node3);
