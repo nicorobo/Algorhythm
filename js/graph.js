@@ -22,7 +22,6 @@ Graph.prototype = {
 	connectNodes: function(id1, id2, weight, undirected){
 		var node1 = this.nodes[this.nodeIDList.indexOf(id1)];
 		var node2 = this.nodes[this.nodeIDList.indexOf(id2)];
-		var undirected = undirected || true;
 		node1.addEdge(new Edge(node2, weight));
 		if(undirected){
 			node2.addEdge(new Edge(node1, weight));

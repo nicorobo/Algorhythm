@@ -2,7 +2,7 @@ var Grid = function(grid, options){
 	Graph.call(this, options);
 	this.grid = [];
 	this.buildGrid(grid);
-	// this.connectGrid();
+	this.connectGrid();
 }
 
 Grid.prototype = Object.create(Graph.prototype, {
@@ -24,6 +24,14 @@ Grid.prototype = Object.create(Graph.prototype, {
 			for(var i=0; i<this.grid.length; i++){
 				for(var j=0; j<this.grid[i].length; j++){
 					var node = this.grid[i][j];
+					for(direction in directions){
+						var dir = directions[direction];
+						var newX = j+dir[0];
+						var newY = i+dir[1];
+						if((0<=newX && newX<this.grid[i].length) && (0<=newY && newY<this.grid.length)){
+							this.connectNodes(node, this.grid[newY][newX], 0, false, false);
+						}
+					}
 				}
 			}
 		}
