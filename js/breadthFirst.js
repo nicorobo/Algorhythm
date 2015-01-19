@@ -1,22 +1,22 @@
 // DEPENDENCIES: graph.js
 
-Graph.prototype.breadthFirstSearch = function(startingNode, endingNode){
+Graph.prototype.breadthFirstSearch = function(startingNodeID, endingNodeID){
 	this.cleanNodes();
 	var frontier = [];
-	this.getNode(startingNode).parent = null;
-	frontier.push(startingNode);
+	this.getNode(startingNodeID).parent = null;
+	frontier.push(startingNodeID);
 	while(frontier.length>0){
 		var currentID = frontier.shift();
 		console.log(currentID);
-		if(currentID == endingNode) break;
-		var current = this.getNode(currentID);
-		for(edge in current.edges){
-			var neighbor = current.edges[edge].target;
+		if(currentID == endingNodeI) break;
+		var currentNode = this.getNode(currentID);
+		for(edge in currentNode.edges){
+			var neighbor = currentNode.edges[edge].target;
 			if(neighbor.parent == '') {
 				frontier.push(neighbor.id);
-				neighbor.parent = current;
+				neighbor.parent = currentNode;
 			}
 		}
 	}
-	this.readPath(startingNode, endingNode);
+	this.readPath(startingNodeID, endingNodeID);
 }

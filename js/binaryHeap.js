@@ -1,3 +1,4 @@
+// DEPENDENCIES: none
 //
 // Binary Heap courtesy of Marijn Haverbeke, author of the fantastic Eloquent Javascript.
 // http://eloquentjavascript.net/appendix2.html

@@ -49,10 +49,10 @@ Graph.prototype = {
 			aNode.parent = '';
 		}
 	},
-	readPath: function(startingNode, endingNode){
+	readPath: function(startingNodeID, endingNodeID){
 		console.log('Beginning Path!');
-		var path = [endingNode];
-		var child = this.getNode(endingNode);
+		var path = [endingNodeID];
+		var child = this.getNode(endingNodeID);
 		var parent = child.parent;
 		while(parent!=null){
 			path.push(parent.id);

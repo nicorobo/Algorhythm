@@ -1,22 +1,27 @@
 // DEPENDENCIES: graph.js, binaryHeap.js
 
-Graph.prototype.dijkstras = function(startingNode, endingNode){
+Graph.prototype.dijkstras = function(startingNodeID, endingNodeID){
 	this.cleanNodes();
 	var frontier = new BinaryHeap(function(node){return node.cost});
-	this.getNode(startingNode).parent = null;
+	var startingNode = this.getNode(startingNodeID);
+	startingNode.cost = 0;
+	startingNode.parent = null;
 	frontier.push(startingNode);
-	while(frontier.length>0){
-		var currentID = frontier.shift();
-		console.log(currentID);
-		if(currentID == endingNode) break;
-		var current = this.getNode(currentID);
-		for(edge in current.edges){
-			var neighbor = current.edges[edge].target;
-			if(neighbor.parent == '') {
-				frontier.push(neighbor.id);
-				neighbor.parent = current;
+	while(frontier.size()>0){
+		var currentNode = frontier.pop();
+		console.log(currentNode);
+		if(currentNode.id == endingNodeID) break;
+		for(edge in currentNode.edges){
+			var currentEdge = currentNode.edges[edge];
+			var neighbor = currentEdge.target;
+			var newCost = currentNode.cost+currentEdge.weight+neighbor.weight;
+			if(newCost<neighbor.cost){
+				neighbor.cost = newCost;
+				neighbor.parent = currentNode;
+				frontier.push(neighbor);
 			}
+			
 		}
 	}
-	this.readPath(startingNode, endingNode);
+	this.readPath(startingNodeID, endingNodeID);
 }
