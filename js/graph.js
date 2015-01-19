@@ -5,9 +5,9 @@ var Graph = function(options){
 }
 
 Graph.prototype = {
-	addNode: function(x, y, cost){
+	addNode: function(x, y, weight){
 		var id = this.nodeID;
-		this.nodes.push(new Node(x, y, cost, id));
+		this.nodes.push(new Node(x, y, weight, id));
 		this.nodeIDList.push(id);
 		this.nodeID++;
 		return id;
@@ -39,6 +39,26 @@ Graph.prototype = {
 	getNode: function(id){
 		return this.nodes[this.nodeIDList.indexOf(id)];
 	},
+	cleanNodes: function(){
+		for(node in this.nodes){
+			var aNode = this.nodes[node];
+			aNode.visited = false;
+			aNode.cost = 9999999;
+			aNode.parent = '';
+		}
+	},
+	readPath: function(startingNode, endingNode){
+		console.log('Beginning Path!');
+		var path = [endingNode];
+		var child = this.getNode(endingNode);
+		var parent = child.parent;
+		while(parent!=null){
+			path.push(parent.id);
+			child = parent;
+			parent = child.parent;
+		}
+		console.log(path.reverse())
+	},
 	readNodes: function(){
 		for(node in this.nodes){
 			console.log(this.nodes[node]);
@@ -48,14 +68,15 @@ Graph.prototype = {
 
 
 
-var Node = function(x, y, cost, id){
+var Node = function(x, y, weight, id){
 	this.id = id;
 	this.x = x;
 	this.y = y;
-	this.cost = cost || 1;
+	this.weight = weight;
+	this.cost = 0;
 	this.visited = false;
 	this.edges = [];
-	this.parent;
+	this.parent = '';
 }
 
 Node.prototype = {
@@ -78,15 +99,15 @@ Node.prototype = {
 		this.edges = [];
 	},
 	toString: function(){
-		return 'x: '+this.x+' y: '+this.y+' cost: '+this.cost+' Edge Length: '+this.edges.length;
+		return 'x: '+this.x+' y: '+this.y+' weight: '+this.weight+' Edge Length: '+this.edges.length;
 	}
 }
 
 
 
-var Edge = function(target, cost){
+var Edge = function(target, weight){
 	this.target = target;
-	this.cost = cost;
+	this.weight = weight;
 }
 
 Edge.prototype = {
