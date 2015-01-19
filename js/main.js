@@ -1,40 +1,55 @@
 var Graph = function(){
 	this.nodes = [];
+	this.nodeIDList = [];
+	this.nodeID = 0;
 }
 
 Graph.prototype = {
-	addNode: function(x, y, weight){
-		if(typeof id == 'object') this.nodes.push(x);
-		else this.nodes.push(new Node(x, y, weight));
+	addNode: function(x, y, cost){
+		var id = this.nodeID;
+		this.nodes.push(new Node(x, y, cost, id));
+		this.nodeIDList.push(id);
+		this.nodeID++;
+		return id;
 	},
-	removeNode: function(node){
-		var index = this.nodes.indexOf(node);
-		if (index >= 0) {
-		  this.nodes.splice( index, 1 );
-		}
+	removeNode: function(id){
+		var index = this.nodeIDList.indexOf(id);
+		var node = this.nodes[index];
+		node.removeAllEdges();
+		this.nodes.splice(index, 1);
 	},
-	connectNodes: function(node1, node2, weight, undirected){
+	connectNodes: function(id1, id2, weight, undirected){
+		var node1 = this.nodes[this.nodeIDList.indexOf(id1)];
+		var node2 = this.nodes[this.nodeIDList.indexOf(id2)];
 		var undirected = undirected || true;
 		node1.addEdge(new Edge(node2, weight));
 		if(undirected){
 			node2.addEdge(new Edge(node1, weight));
 		}
 	},
-	disconnectNodes: function(node1, node2, undirected){
+	disconnectNodes: function(id1, id2, undirected){
+		var node1 = this.nodes[this.nodeIDList.indexOf(id1)];
+		var node2 = this.nodes[this.nodeIDList.indexOf(id2)];
 		var undirected = undirected || true;
 		node1.removeEdge(node2);
 		if(undirected){
 			node2.removeEdge(node1);
+		}
+	},
+	readNodes: function(){
+		for(node in this.nodes){
+			console.log(this.nodes[node]);
 		}
 	}
 }
 
 
 
-var Node = function(id, x, y, weight){
+var Node = function(x, y, cost, id){
+	this.id = id;
 	this.x = x;
 	this.y = y;
-	this.weight = weight || 1;
+	this.cost = cost || 1;
 	this.visited = false;
 	this.edges = [];
 	this.parent;
@@ -53,16 +68,22 @@ Node.prototype = {
 		if(index>=0) this.edges.splice( index, 1 );
 		else console.log('There was no connection');
 	},
+	removeAllEdges: function(){
+		for(var i=0; i<this.edges.length; i++){
+			this.edges[i].target.removeEdge(this);
+		}
+		this.edges = [];
+	},
 	toString: function(){
-		return 'x: '+this.x+' y: '+this.y+' weight: '+this.weight;
+		return 'x: '+this.x+' y: '+this.y+' cost: '+this.cost+' Edge Length: '+this.edges.length;
 	}
 }
 
 
 
-var Edge = function(target, weight){
+var Edge = function(target, cost){
 	this.target = target;
-	this.weight = weight;
+	this.cost = cost;
 }
 
 Edge.prototype = {
@@ -71,5 +92,5 @@ Edge.prototype = {
 
 
 var graph = new Graph();
-graph.addNode(1, 5, 2);
-graph.addNode(4, 8, 1);
+var node1 = graph.addNode(1, 5, 2);
+var node2 = graph.addNode(4, 8, 1);
