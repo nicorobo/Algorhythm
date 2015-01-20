@@ -1,12 +1,14 @@
-// DEPENDENCIES: graph.js, binaryHeap.js
+// DEPENDENCIES: graph.js, heuristics.js, binaryHeap.js
 
 Graph.prototype.astar = function(startingNodeID, endingNodeID){
 	this.cleanNodes();
-	var h = new Heuristic;
-	var frontier = new BinaryHeap(function(node){return node.cost});
+	var h = new Heuristic();
+	var frontier = new BinaryHeap(function(node){return node.estimate});
 	var startingNode = this.getNode(startingNodeID);
+	startingNode.estimate = 0;
 	startingNode.cost = 0;
 	startingNode.parent = null;
+	startingNode.visited = true;
 	frontier.push(startingNode);
 	while(frontier.size()>0){
 		var currentNode = frontier.pop();
@@ -16,12 +18,14 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 			var currentEdge = currentNode.edges[edge];
 			var neighbor = currentEdge.target;
 			var newCost = currentNode.cost+currentEdge.weight+neighbor.weight;
-			if(newCost<neighbor.cost){
+			if(!neighbor.visited || newCost<neighbor.cost){
+				var estimate = h.manhattan(this.getNode(endingNodeID), neighbor)+newCost;
 				neighbor.cost = newCost;
+				neighbor.estimate = estimate;
 				neighbor.parent = currentNode;
+				neighbor.visited = true;
 				frontier.push(neighbor);
 			}
-			
 		}
 	}
 	this.readPath(startingNodeID, endingNodeID);

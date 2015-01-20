@@ -23,8 +23,8 @@ Grid.prototype = Object.create(Graph.prototype, {
 	}, 
 	connectGrid: {
 		value: function(){
-			var directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-			// var directions = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+			// var directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+			var directions = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
 			for(var i=0; i<this.grid.length; i++){
 				for(var j=0; j<this.grid[i].length; j++){
 					var node = this.grid[i][j];

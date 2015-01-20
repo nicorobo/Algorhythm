@@ -56,6 +56,7 @@ BinaryHeap.prototype = {
     return this.content.length;
   },
 
+
   bubbleUp: function(n) {
     // Fetch the element that has to be moved.
     var element = this.content[n], score = this.scoreFunction(element);
