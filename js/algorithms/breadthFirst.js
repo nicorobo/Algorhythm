@@ -8,7 +8,7 @@ Graph.prototype.breadthFirstSearch = function(startingNodeID, endingNodeID){
 	frontier.push(startingNodeID);
 	while(frontier.length>0){
 		var currentID = frontier.shift();
-		console.log(currentID);
+		console.log(this.getNode(currentID));
 		if(currentID == endingNodeID) break;
 		var currentNode = this.getNode(currentID);
 		for(edge in currentNode.edges){
