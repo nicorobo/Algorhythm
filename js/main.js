@@ -8,4 +8,4 @@ var map = [
 	];
 var graph = new Graph();
 var grid = new Grid(map);
-grid.dijkstras(0, 12);
+grid.greedyBestFirst(0, 24);

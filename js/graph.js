@@ -69,13 +69,13 @@ Graph.prototype = {
 }
 
 
-
 var Node = function(x, y, weight, id){
 	this.id = id;
 	this.x = x;
 	this.y = y;
 	this.weight = weight;
 	this.cost = 0;
+	this.estimate = 0;
 	this.visited = false;
 	this.edges = [];
 	this.parent = '';
@@ -104,7 +104,6 @@ Node.prototype = {
 		return 'x: '+this.x+' y: '+this.y+' weight: '+this.weight+' Edge Length: '+this.edges.length;
 	}
 }
-
 
 
 var Edge = function(target, weight){
