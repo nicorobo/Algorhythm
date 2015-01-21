@@ -11,7 +11,7 @@ var Grid = function(grid, options){
 Grid.prototype = Object.create(Graph.prototype, {
 	buildGrid: { 
 	    value: function(grid){ 
-	    	console.log('We have a grid!');
+	    	console.log('Building grid...');
 			for(var i=0; i<grid.length; i++){
 				var row = [];
 				for(var j=0; j<grid[i].length; j++){
@@ -19,12 +19,15 @@ Grid.prototype = Object.create(Graph.prototype, {
 				}
 				this.grid.push(row);
 			}
+			console.log('Grid complete!')
 		}
 	}, 
 	connectGrid: {
 		value: function(){
-			// var directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-			var directions = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+			console.log('Connecting grid...');
+			var directions;
+			if(this.options.diagonal) directions = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+			else directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 			for(var i=0; i<this.grid.length; i++){
 				for(var j=0; j<this.grid[i].length; j++){
 					var node = this.grid[i][j];
@@ -33,11 +36,22 @@ Grid.prototype = Object.create(Graph.prototype, {
 						var newX = j+dir[0];
 						var newY = i+dir[1];
 						if((0<=newX && newX<this.grid[i].length) && (0<=newY && newY<this.grid.length)){
-							this.connectNodes(node, this.grid[newY][newX], 0, false, false);
+							if(this.getNode(this.grid[newY][newX])){
+								this.connectNodes(node, this.grid[newY][newX], 0, false, false);
+							}
 						}
 					}
 				}
 			}
+			console.log('Grid connected!');
+		}
+	},
+	getNode: {
+		value: function(id){
+			if(typeof id == "object"){
+				id = this.grid[id[1]][id[0]];
+			}
+			return this.nodes[this.nodeIDList.indexOf(id)];
 		}
 	}
 });

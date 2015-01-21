@@ -5,6 +5,7 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 	var h = new Heuristic();
 	var frontier = new BinaryHeap(function(node){return node.estimate});
 	var startingNode = this.getNode(startingNodeID);
+	var closest = startingNode;
 	startingNode.estimate = 0;
 	startingNode.cost = 0;
 	startingNode.parent = null;
@@ -20,6 +21,11 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 			var newCost = currentNode.cost+currentEdge.weight+neighbor.weight;
 			if(!neighbor.visited || newCost<neighbor.cost){
 				var estimate = h.manhattan(this.getNode(endingNodeID), neighbor)+newCost;
+				if(this.options.closest){
+					if(estimate<closest.estimate){
+						closest = neighbor;
+					}
+				}
 				neighbor.cost = newCost;
 				neighbor.estimate = estimate;
 				neighbor.parent = currentNode;

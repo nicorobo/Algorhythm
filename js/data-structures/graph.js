@@ -4,6 +4,7 @@ var Graph = function(options){
 	this.nodes = [];
 	this.nodeIDList = [];
 	this.nodeID = 0;
+	this.options = options || {};
 }
 
 Graph.prototype = {
