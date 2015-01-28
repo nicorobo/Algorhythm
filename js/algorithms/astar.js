@@ -6,7 +6,8 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 	var frontier = new BinaryHeap(function(node){return node.estimate});
 	var startingNode = this.getNode(startingNodeID);
 	var closest = startingNode;
-	startingNode.estimate = 0;
+	var targetFound = false;
+	startingNode.estimate = 99999999;
 	startingNode.cost = 0;
 	startingNode.parent = null;
 	startingNode.visited = true;
@@ -14,7 +15,10 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 	while(frontier.size()>0){
 		var currentNode = frontier.pop();
 		console.log(currentNode);
-		if(currentNode.id == endingNodeID) break;
+		if(currentNode.id == endingNodeID){
+			targetFound = true;
+			break;
+		}
 		for(edge in currentNode.edges){
 			var currentEdge = currentNode.edges[edge];
 			var neighbor = currentEdge.target;
@@ -22,7 +26,10 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 			if(!neighbor.visited || newCost<neighbor.cost){
 				var estimate = h.manhattan(this.getNode(endingNodeID), neighbor)+newCost;
 				if(this.options.closest){
-					if(estimate<closest.estimate){
+					console.log('Hmm is this the new closest node?');
+					console.log('Estimate: '+estimate+' closest.estimate: '+closest.estimate );
+					if(estimate<closest.estimate || (estimate==closest.estimate && newCost<closest.estimate)){
+						console.log('We have a new closest node!');
 						closest = neighbor;
 					}
 				}
@@ -34,5 +41,15 @@ Graph.prototype.astar = function(startingNodeID, endingNodeID){
 			}
 		}
 	}
-	this.readPath(startingNodeID, endingNodeID);
+	if(targetFound){
+		console.log('The is the path to the ending node.');
+		this.readPath(startingNodeID, endingNodeID);
+	}
+	else if(this.options.closest){
+		console.log('This is the path to the closest node.');
+		this.readPath(startingNodeID, closest.id);
+	}
+	else{
+		console.log('Sorry, the path cannot be completed.');
+	}
 }
