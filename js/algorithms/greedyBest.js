@@ -1,12 +1,19 @@
 // DEPENDENCIES: graph.js, heuristics.js, binaryHeap.js
 
-Graph.prototype.greedyBestFirst = function(startingNodeID, endingNodeID){
+Graph.prototype.greedyBest = function(startingNodeID, endingNodeID, algorithmOptions){
+	if(!algorithmOptions.heuristic) algorithmOptions.heuristic = 'manhattan';
 	this.cleanNodes();
-	var h = new Heuristic();
+	var h = new Heuristic()[algorithmOptions.heuristic];
 	var frontier = new BinaryHeap(function(node){return node.estimate});
 	var startingNode = this.getNode(startingNodeID);
+	endingNodeID = this.getNode(endingNodeID).id;
 	var closest = startingNode;
 	var targetFound = false;
+	var checkAvoid = false;
+	if(algorithmOptions.avoid != undefined){
+		checkAvoid = true;
+		if(typeof algorithmOptions.avoid != 'object') algorithmOptions.avoid = [algorithmOptions.avoid];
+	}
 	startingNode.estimate = 99999;
 	startingNode.parent = null;
 	frontier.push(startingNode);
@@ -20,11 +27,14 @@ Graph.prototype.greedyBestFirst = function(startingNodeID, endingNodeID){
 		for(edge in currentNode.edges){
 			var currentEdge = currentNode.edges[edge];
 			var neighbor = currentEdge.target;
+			if(checkAvoid){
+				if(algorithmOptions.avoid.indexOf(neighbor.weight) != -1) break;
+			}
 			if(neighbor.parent == ''){
-				var estimate = h.manhattan(this.getNode(endingNodeID), neighbor);
+				var estimate = h(this.getNode(endingNodeID), neighbor);
 				neighbor.estimate = estimate;
 				neighbor.parent = currentNode;
-				if(this.options.closest){
+				if(algorithmOptions.closest){
 					if(estimate<closest.estimate) closest = neighbor;
 				}
 				frontier.push(neighbor);
@@ -35,7 +45,7 @@ Graph.prototype.greedyBestFirst = function(startingNodeID, endingNodeID){
 		console.log('The is the path to the ending node.');
 		this.readPath(startingNodeID, endingNodeID);
 	}
-	else if(this.options.closest){
+	else if(algorithmOptions.closest){
 		console.log('This is the path to the closest node.');
 		this.readPath(startingNodeID, closest.id);
 	}

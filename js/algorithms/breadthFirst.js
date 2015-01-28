@@ -1,6 +1,6 @@
 // DEPENDENCIES: graph.js
 
-Graph.prototype.breadthFirstSearch = function(startingNodeID, endingNodeID){
+Graph.prototype.breadthFirst = function(startingNodeID, endingNodeID){
 	this.cleanNodes();
 	var frontier = [];
 	this.getNode(startingNodeID).parent = null;
